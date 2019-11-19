@@ -5,18 +5,20 @@ const config = require('../../../config')
 const saveFile = require('../../aws/s3/saveFile')
 
 const saveCertificate = (data) => {
-  saveFile(
-    config['s3-cert-bucket'],
-    config['s3-folder'],
-    `${data.key}.json`,
-    JSON.stringify({
-      key: data.keypair,
-      cert: data.cert,
-      issuerCert: data.issuerCert
-    })
-  );
-  console.log(`About to write PEM files for ${key}..`)
   try {
+    var eTag = saveFile(
+      config['s3-cert-bucket'],
+      config['s3-folder'],
+      `${data.key}.json`,
+      JSON.stringify({
+        key: data.keypair,
+        cert: data.cert,
+        issuerCert: data.issuerCert
+      })
+    );
+
+    console.log(`About to write PEM files for ${key}..`)
+    
     saveFile(
       config['s3-cert-bucket'],
       config['s3-folder'],
@@ -37,9 +39,13 @@ const saveCertificate = (data) => {
       `${data.key}-key.pem`,
       data.keypair.privateKeyPem.toString()
     );
+
+    return eTag;
   } catch (e) {
-    console.error('Error writing pem files', e)
+    console.error('Error writing cert files', e)
+    throw e;
   }
+  return "";
 }
 
 const createCertificate = (certUrl, certInfo, acctKeyPair) => (authorizations) =>

@@ -17,7 +17,7 @@ const saveCertificate = (data) =>{
       })
     );
 
-    console.log(`About to write PEM files for ${key}..`)
+    console.log(`About to write PEM files for ${data.key}..`)
     
     saveFile(
       config['s3-cert-bucket'],
@@ -25,7 +25,7 @@ const saveCertificate = (data) =>{
       `${data.key}.pem`,
       data.cert
     );
-    if (certJSON.issuerCert) {
+    if (data.issuerCert) {
       saveFile(
         config['s3-cert-bucket'],
         config['s3-folder'],

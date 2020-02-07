@@ -30,3 +30,11 @@ module.exports = certInfo =>
       ? v1ACME(urls, certInfo)
       : v2ACME(urls, certInfo)
   )
+  .catch(err => {
+    console.log(`v2ACME error:`)
+    console.log(err)
+    ({
+      err: true,
+      msg: `v2ACME error updating cert for ${key}, received err ${err}, ${err.stack}`
+    })
+  })

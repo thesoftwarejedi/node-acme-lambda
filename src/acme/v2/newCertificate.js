@@ -17,6 +17,8 @@ const newCertificate = (keypair, finalizeUrl, nonceUrl, url) => (csr) => {
         console.log(`Encountered an internal acme server error, will need to retry this configuration (re-run lambda).`)
       }
     }
+    console.log(`Encountered an error:`)
+    console.log(err)
     throw err
   })
 }
